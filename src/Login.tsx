@@ -57,9 +57,9 @@ const LoginForm: React.FC = () => {
     if (user) nav("/chat");
   }, [user]);
   console.log(loading);
-  if (initializing) return <p>Loading..</p>;
+  if (initializing) return <p className="h-dvh flex justify-center items-center text-center">Loading...</p>;
   return (
-    <div className="h-dvh flex items-center justify-center">
+    <div className="h-dvh p-4 flex items-center justify-center">
       {anonymousOnly ? (
         <div className="max-w-sm mx-auto p-6 bg-teal-50 rounded-lg shadow-lg text-center">
           <h1 className="text-3xl font-extrabold mb-2 text-teal-800">
