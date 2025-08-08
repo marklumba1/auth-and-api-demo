@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState, type MouseEventHandler } from "react";
 import useAuth from "./firebase/useAuth";
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const [isRegister, setIsRegister] = useState(false);
 
-  const { error, setError, loading, handleSignIn, handleRegister } = useAuth();
+  const { user, error, initializing, setError, loading, handleSignIn, handleRegister, handleSignInAnon, handleSignOut } = useAuth();
 
   const {
     register,
@@ -23,6 +24,11 @@ const LoginForm: React.FC = () => {
     reset();
   };
 
+  const handleAnonymous: MouseEventHandler<HTMLButtonElement>= (e) => {
+    e.preventDefault()
+    handleSignInAnon()
+  }
+
   const passwordValue = watch("password");
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -35,8 +41,17 @@ const LoginForm: React.FC = () => {
       setError("Form is not valid.");
     }
   };
+
+  const nav = useNavigate()
+
+   useEffect(() => {
+    if(user) nav("/chat")
+    },[user])
+    console.log(loading)
+    if (initializing) return <p>Loading..</p>
   return (
     <div className="h-dvh flex items-center justify-center">
+        {loading}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-3 max-w-md p-6 border border-teal-700 rounded-lg bg-teal-800 shadow-lg"
@@ -104,6 +119,9 @@ const LoginForm: React.FC = () => {
         <button type="submit" disabled={loading}>
           {isRegister ? `Register` : `Login`}
         </button>
+         <button className="anonymous" onClick={handleAnonymous} disabled={loading}>
+          Sign in Anonymously
+        </button>
         <p
           className=" cursor-pointer underline text-center"
           onClick={handleSwitch}
@@ -115,7 +133,6 @@ const LoginForm: React.FC = () => {
         {error && <p className="text-rose-500 text-center">{error}</p>}
         {loading && <p className="text-center">Loading...</p>}
       </form>
-      {/* <button onClick={() => handleSignOut()}>asd</button> */}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInAnonymously,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -13,6 +14,7 @@ const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(true)
 
   const handleAuthMethod = async (authMethod: any, args: any[]) => {
     setLoading(true);
@@ -30,12 +32,19 @@ const useAuth = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
+      if (user){ 
+        setUser(user)
+      }
       else setUser(null);
+      setInitializing(false)
     });
 
     return unsubscribe;
   }, []);
+
+  const handleSignInAnon = () => {
+    handleAuthMethod(signInAnonymously,[auth]).then(data => console.log(data))
+  }
 
   const handleSignIn = (email: string, password: string) =>
     handleAuthMethod(signInWithEmailAndPassword, [auth, email, password]);
@@ -57,11 +66,13 @@ const useAuth = () => {
     user,
     loading,
     error,
+    initializing,
     setError,
     handleSignIn,
     handleRegister,
     handleUpdateUser,
     handleSignOut,
+    handleSignInAnon
   };
 };
 export default useAuth;
