@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import useAuth from "./firebase/useAuth";
 import useChat from "./firebase/useChat";
+import Header from "./Header";
+
+const bubbleVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -22,7 +29,7 @@ const Chat = () => {
     <div className="flex flex-col h-dvh bg-teal-900 text-white">
       {/* Header */}
       <header className="p-4 bg-teal-700 flex justify-between items-center shadow">
-        <h2 className="text-lg font-bold">Mekus</h2>
+        <Header />
         <button
           onClick={handleSignOut}
           className="px-3 py-1 rounded !bg-amber-500 text-white hover:bg-amber-600 transition"
@@ -36,8 +43,11 @@ const Chat = () => {
         {messages.map((msg) => {
           const isCurrentUser = msg?.userId === user?.uid;
           return (
-            <div
+            <motion.div
               key={msg.id}
+              initial="hidden"
+              animate="visible"
+              variants={bubbleVariants}
               className={`flex mb-3 ${
                 isCurrentUser ? "justify-end" : "justify-start"
               }`}
@@ -56,7 +66,7 @@ const Chat = () => {
                 </p>
                 <p className="leading-relaxed">{msg.text}</p>
               </div>
-            </div>
+            </motion.div>
           );
         })}
         <div ref={bottomRef} />
