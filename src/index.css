@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+html {
+  @apply bg-teal-900 text-teal-100;
+}
+
+button {
+  @apply bg-teal-700 hover:bg-teal-600 text-teal-100 font-semibold py-2 px-6 rounded shadow-md transition-colors duration-300;
+}
+
+link {
+  @apply text-teal-300 hover:text-teal-100 underline cursor-pointer transition-colors duration-300;
+}
+
+h2 {
+  @apply text-teal-200 text-3xl font-bold;
+}
+
+p {
+  @apply leading-relaxed;
+}
+
+form p.error{
+  @apply text-sm;
+}
+
+p.error{
+   @apply text-rose-500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  @apply bg-teal-800 border border-teal-600 rounded-md text-teal-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 transition duration-300;
+}
